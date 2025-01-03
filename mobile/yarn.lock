@@ -811,6 +811,11 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
+"@expo-google-fonts/karla@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/karla/-/karla-0.2.3.tgz#dd519fe51e5598ec2339b336f431af4b757c0b97"
+  integrity sha512-Y0FSxvQFunCHQ8KJ0xqw1Q+49kCwSeFYrih9vM2Z5+RLglN+/nNqnTSyumKjsabZ7HLb01izFASEdqO15LvrEw==
+
 "@expo/bunyan@^4.0.0":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@expo/bunyan/-/bunyan-4.0.1.tgz#ab9e17e36c71c704a0ce72168378a487368da736"
