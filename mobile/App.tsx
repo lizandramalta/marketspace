@@ -1,5 +1,5 @@
 import { Icon } from '@components/Icon'
-import { GluestackUIProvider } from '@gluestack-ui/themed'
+import { GluestackUIProvider, Text } from '@gluestack-ui/themed'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, View } from 'react-native'
 import { config } from './config/gluestack-ui.config'
@@ -9,6 +9,7 @@ import {
   Karla_400Regular
 } from '@expo-google-fonts/karla'
 import { Button } from '@components/Button'
+import { Input } from '@components/Input'
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Karla_400Regular, Karla_700Bold })
@@ -20,8 +21,9 @@ export default function App() {
   return (
     <GluestackUIProvider config={config}>
       <View style={styles.container}>
-        <Button title="Button" icon="Tag" theme="gray" />
-        <Button title="Button" icon="Tag" />
+        <Input placeholder="Placeholder" secureTextEntry>
+          <Text>R$</Text>
+        </Input>
         <StatusBar style="auto" />
       </View>
     </GluestackUIProvider>
