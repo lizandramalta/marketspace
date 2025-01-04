@@ -1788,6 +1788,11 @@
   dependencies:
     semver "^7.3.5"
 
+"@phosphor-icons/core@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@phosphor-icons/core/-/core-2.1.1.tgz#62a4cfbec9772f1a613a647da214fbb96f3ad39d"
+  integrity sha512-v4ARvrip4qBCImOE5rmPUylOEK4iiED9ZyKjcvzuezqMaiRASCHKcRIuvvxL/twvLpkfnEODCOJp5dM4eZilxQ==
+
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
@@ -5787,6 +5792,13 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
+
+phosphor-react-native@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/phosphor-react-native/-/phosphor-react-native-2.2.2.tgz#f851a0792eef7a4d0939a3be0b3324d4fca051a1"
+  integrity sha512-eSvI5x8p1qEZ8+AW8srn6jIkruBpEJs55iTzZMQpmFvtEKjTr0yiIYn40gTfmkZ0udblyCP1XHvMZnemIXYhVA==
+  dependencies:
+    "@phosphor-icons/core" "^2.1.1"
 
 picocolors@^1.0.0, picocolors@^1.1.0, picocolors@^1.1.1:
   version "1.1.1"
