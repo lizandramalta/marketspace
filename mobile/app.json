@@ -24,6 +24,14 @@
     "web": {
       "favicon": ""
     },
-    "plugins": ["expo-font"]
+    "plugins": [
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permitir o Markestspace a acessar suas fotos."
+        }
+      ]
+    ]
   }
 }

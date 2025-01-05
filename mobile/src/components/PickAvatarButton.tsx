@@ -1,23 +1,51 @@
-import { Box, Center } from '@gluestack-ui/themed'
-import { Icon } from './Icon'
+import { Box, Center, Image } from '@gluestack-ui/themed'
+import { ImageUtils } from '@utils/imageUtils'
+import { useState } from 'react'
 import { Button } from './Button'
+import { Icon } from './Icon'
 
 type Props = {
   onPickAvatar: (uri: string) => void
 }
 
 export function PickAvatarButton({ onPickAvatar }: Props) {
+  const [selectedAvatarUri, setSelectedAvatarUri] = useState('')
+  async function handlePickImage() {
+    try {
+      const avatarUri = await ImageUtils.pickImage()
+      if (avatarUri.length) {
+        setSelectedAvatarUri(avatarUri)
+        onPickAvatar(avatarUri)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Box>
-      <Center
-        rounded="$full"
-        w={88}
-        h={88}
-        borderWidth={3}
-        borderColor="$blueLight"
-      >
-        <Icon as="User" weight="bold" color="gray400" size={44} />
-      </Center>
+      {!!selectedAvatarUri ? (
+        <Image
+          rounded="$full"
+          w={88}
+          h={88}
+          borderWidth={3}
+          borderColor="$blueLight"
+          source={{ uri: selectedAvatarUri }}
+          defaultSource={{ uri: selectedAvatarUri }}
+          alt="Foto do usuário"
+        />
+      ) : (
+        <Center
+          rounded="$full"
+          w={88}
+          h={88}
+          borderWidth={3}
+          borderColor="$blueLight"
+        >
+          <Icon as="User" weight="bold" color="gray400" size={44} />
+        </Center>
+      )}
       <Button
         icon="PencilSimpleLine"
         rounded="$full"
@@ -27,6 +55,7 @@ export function PickAvatarButton({ onPickAvatar }: Props) {
         position="absolute"
         bottom={0}
         right={-6}
+        onPress={handlePickImage}
       />
     </Box>
   )
