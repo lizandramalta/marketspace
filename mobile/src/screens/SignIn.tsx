@@ -1,9 +1,9 @@
+import { Button, Input } from '@components/index'
 import { Center, Text, VStack } from '@gluestack-ui/themed'
-import { Input, Button } from '@components/index'
-
-import Logo from '@assets/logo.svg'
-import AppName from '@assets/appName.svg'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
+import AppName from '@assets/appName.svg'
+import Logo from '@assets/logo.svg'
 
 export function SignIn({ navigation }: AuthScreenProps<'SignIn'>) {
   function handleCreateAccount() {

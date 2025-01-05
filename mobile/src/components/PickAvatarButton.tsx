@@ -3,6 +3,8 @@ import { ImageUtils } from '@utils/imageUtils'
 import { useState } from 'react'
 import { Button } from './Button'
 import { Icon } from './Icon'
+import { useToast } from '@hooks/useToast'
+import { AppError } from '@utils/AppError'
 
 type Props = {
   onPickAvatar: (uri: string) => void
@@ -10,6 +12,8 @@ type Props = {
 
 export function PickAvatarButton({ onPickAvatar }: Props) {
   const [selectedAvatarUri, setSelectedAvatarUri] = useState('')
+  const toast = useToast()
+
   async function handlePickImage() {
     try {
       const avatarUri = await ImageUtils.pickImage()
@@ -18,7 +22,12 @@ export function PickAvatarButton({ onPickAvatar }: Props) {
         onPickAvatar(avatarUri)
       }
     } catch (error) {
-      console.log(error)
+      if (error instanceof AppError) {
+        toast.show({
+          id: 'avatar-error',
+          title: error.message
+        })
+      }
     }
   }
 
