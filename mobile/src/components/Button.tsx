@@ -10,7 +10,7 @@ import { Icon } from './Icon'
 type ButtonTheme = 'blue' | 'black' | 'gray'
 
 type Props = ComponentProps<typeof GluestackButton> & {
-  title: string
+  title?: string
   icon?: keyof typeof PhosphorIcons
   theme?: ButtonTheme
   isLoading?: boolean
@@ -25,9 +25,10 @@ export function Button({
 }: Props) {
   return (
     <GluestackButton
-      flex={1}
+      w="$full"
       gap="$2"
       p="$3"
+      maxHeight={42}
       rounded="$md"
       alignItems="center"
       bgColor={
@@ -52,13 +53,15 @@ export function Button({
               weight="bold"
             />
           )}
-          <ButtonText
-            color={theme === 'gray' ? '$gray200' : '$gray700'}
-            fontFamily="$heading"
-            fontSize="$sm"
-          >
-            {title}
-          </ButtonText>
+          {!!title && (
+            <ButtonText
+              color={theme === 'gray' ? '$gray200' : '$gray700'}
+              fontFamily="$heading"
+              fontSize="$sm"
+            >
+              {title}
+            </ButtonText>
+          )}
         </>
       )}
     </GluestackButton>

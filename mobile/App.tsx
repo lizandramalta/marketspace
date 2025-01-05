@@ -1,4 +1,5 @@
 import {
+  Karla_300Light,
   Karla_400Regular,
   Karla_700Bold,
   useFonts
@@ -6,17 +7,20 @@ import {
 import { GluestackUIProvider } from '@gluestack-ui/themed'
 import { Routes } from '@routes/index'
 import { config } from './config/gluestack-ui.config'
+import { Loading } from '@components/Loading'
+import { StatusBar } from 'react-native'
 
 export default function App() {
-  const [fontsLoaded] = useFonts({ Karla_400Regular, Karla_700Bold })
-
-  if (!fontsLoaded) {
-    return
-  }
+  const [fontsLoaded] = useFonts({
+    Karla_300Light,
+    Karla_400Regular,
+    Karla_700Bold
+  })
 
   return (
     <GluestackUIProvider config={config}>
-      <Routes />
+      <StatusBar barStyle="dark-content" translucent />
+      {fontsLoaded ? <Routes /> : <Loading />}
     </GluestackUIProvider>
   )
 }

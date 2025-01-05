@@ -31,6 +31,7 @@ export function Input({ secureTextEntry, children, ...rest }: Props) {
       {children}
       <InputField
         my="$3"
+        px={0}
         placeholderTextColor="$gray400"
         fontFamily="$body"
         fontSize="$md"

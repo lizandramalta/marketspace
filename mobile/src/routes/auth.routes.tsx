@@ -5,9 +5,9 @@ const { Navigator, Screen } = createNativeStackNavigator<AuthParamList>()
 
 export function AuthRoutes() {
   return (
-    <Navigator>
+    <Navigator screenOptions={{ headerShown: false }}>
       <Screen name="SignIn" component={SignIn} />
-      <Screen name="SingOut" component={SignUp} />
+      <Screen name="SingUp" component={SignUp} />
     </Navigator>
   )
 }

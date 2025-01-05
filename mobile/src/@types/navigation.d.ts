@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 export declare global {
   type AuthParamList = {
     SignIn: undefined
-    SingOut: undefined
+    SingUp: undefined
   }
 
   type AppTabParamList = {
