@@ -18,7 +18,10 @@ type FormDataProps = {
 const formSchema = yup.object({
   name: yup.string().required('Informe o nome.'),
   email: yup.string().required('Informe o e-mail.').email('E-mail inválido'),
-  tel: yup.string().required('Informe o telefone.'),
+  tel: yup
+    .string()
+    .required('Informe o telefone.')
+    .min(14, 'Telefone inválido'),
   password: yup
     .string()
     .required('Informe a senha.')
@@ -111,6 +114,8 @@ export function SignUp({ navigation }: AuthScreenProps<'SingUp'>) {
                     onChangeText={onChange}
                     errorMessage={errors.tel?.message}
                     keyboardType="number-pad"
+                    mask="phone"
+                    maxLength={15}
                   />
                 )}
               />

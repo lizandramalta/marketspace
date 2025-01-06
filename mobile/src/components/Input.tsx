@@ -8,16 +8,20 @@ import { ComponentProps, useEffect, useState } from 'react'
 import { Input as GluestackInput } from '@gluestack-ui/themed'
 import { Icon } from './Icon'
 import { TouchableOpacity } from 'react-native'
+import { MaskUtils } from '@utils/MaskUtils'
 
 type Props = ComponentProps<typeof InputField> & {
   errorMessage?: string
   isPasswordInput?: boolean
+  mask?: 'phone'
 }
 
 export function Input({
   errorMessage,
   isPasswordInput,
   children,
+  mask,
+  onChangeText,
   ...rest
 }: Props) {
   const [isShowingPassword, setIsShowingPassword] = useState(false)
@@ -40,6 +44,22 @@ export function Input({
 
   function handleShowPassword() {
     setIsShowingPassword(!isShowingPassword)
+  }
+
+  function applyMask(value: string) {
+    switch (mask) {
+      case 'phone': {
+        return MaskUtils.phoneMask(value)
+      }
+      default: {
+        return value
+      }
+    }
+  }
+
+  function handleChange(text: string) {
+    const maskedValue = mask ? applyMask(text) : text
+    onChangeText?.(maskedValue)
   }
 
   useEffect(() => {
@@ -81,6 +101,7 @@ export function Input({
           lineHeight="$md"
           secureTextEntry={isPasswordInput && !isShowingPassword}
           {...rest}
+          onChangeText={handleChange}
           onBlur={handleBlur}
           onFocus={handleFocus}
         />
