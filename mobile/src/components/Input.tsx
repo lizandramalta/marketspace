@@ -63,10 +63,8 @@ export function Input({
   }
 
   useEffect(() => {
-    if (errorMessage) {
-      setIsInvalid(!!errorMessage)
-      setError(errorMessage)
-    }
+    setIsInvalid(!!errorMessage)
+    setError(errorMessage ? errorMessage : '')
   }, [errorMessage])
 
   return (
