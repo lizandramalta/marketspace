@@ -1,30 +1,80 @@
+import { Icon, IconColor } from '@components/Icon'
+import { useToken } from '@gluestack-style/react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
   AdCreate,
-  Home,
-  UserAds,
-  SignOut,
   AdDetails,
-  AdPreview
+  AdPreview,
+  Home,
+  SignOut,
+  UserAds
 } from '@screens/index'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const TabNavigator = createBottomTabNavigator<AppTabParamList>()
 const StackNavigator = createNativeStackNavigator<AppStackParamList>()
 
 function BottomTabNavigation() {
+  const insets = useSafeAreaInsets()
+  const tabBarBackgroundColor = useToken('colors', 'gray700')
+
   return (
-    <TabNavigator.Navigator>
-      <TabNavigator.Screen name="Home" component={Home} />
-      <TabNavigator.Screen name="UserAds" component={UserAds} />
-      <TabNavigator.Screen name="SignOut" component={SignOut} />
+    <TabNavigator.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          borderTopWidth: 0,
+          backgroundColor: tabBarBackgroundColor,
+          paddingTop: 20,
+          paddingBottom: insets.bottom + 28,
+          height: 72
+        },
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: 'gray200' as IconColor,
+        tabBarInactiveTintColor: 'gray400' as IconColor
+      }}
+    >
+      <TabNavigator.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <Icon
+              as="House"
+              weight={focused ? 'bold' : 'regular'}
+              color={color as IconColor}
+            />
+          )
+        }}
+      />
+      <TabNavigator.Screen
+        name="UserAds"
+        component={UserAds}
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <Icon
+              as="Tag"
+              weight={focused ? 'bold' : 'regular'}
+              color={color as IconColor}
+            />
+          )
+        }}
+      />
+      <TabNavigator.Screen
+        name="SignOut"
+        component={SignOut}
+        options={{
+          tabBarIcon: ({ color }) => <Icon as="SignOut" color="redLight" />
+        }}
+      />
     </TabNavigator.Navigator>
   )
 }
 
 function StackNavigation() {
   return (
-    <StackNavigator.Navigator>
+    <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
       <StackNavigator.Screen name="Root" component={BottomTabNavigation} />
       <StackNavigator.Screen name="AdCreate" component={AdCreate} />
       <StackNavigator.Screen name="AdDetails" component={AdDetails} />

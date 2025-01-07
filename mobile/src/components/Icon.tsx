@@ -1,9 +1,11 @@
 import * as PhosphorIcons from 'phosphor-react-native'
 import { customizedColors } from '../../config/gluestack-ui.config'
 
+export type IconColor = keyof typeof customizedColors
+
 type Props = {
   as: keyof typeof PhosphorIcons
-  color?: keyof typeof customizedColors
+  color?: IconColor
   size?: number
   weight?: 'regular' | 'bold' | 'fill'
 }
