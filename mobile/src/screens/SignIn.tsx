@@ -7,6 +7,8 @@ import * as yup from 'yup'
 
 import AppName from '@assets/appName.svg'
 import Logo from '@assets/logo.svg'
+import { useState } from 'react'
+import { useAuth } from '@hooks/useAuth'
 
 type FormDataProps = {
   email: string
@@ -19,6 +21,8 @@ const formSchema = yup.object({
 })
 
 export function SignIn({ navigation }: AuthScreenProps<'SignIn'>) {
+  const [isLoading, setIsLoading] = useState(false)
+  const { signIn } = useAuth()
   const {
     control,
     handleSubmit,
@@ -29,8 +33,10 @@ export function SignIn({ navigation }: AuthScreenProps<'SignIn'>) {
     navigation.navigate('SingUp')
   }
 
-  function handleSignIn(data: FormDataProps) {
-    console.log(data)
+  async function handleSignIn(data: FormDataProps) {
+    setIsLoading(true)
+    await signIn(data)
+    setIsLoading(false)
   }
 
   return (
@@ -84,6 +90,7 @@ export function SignIn({ navigation }: AuthScreenProps<'SignIn'>) {
                     errorMessage={errors.email?.message}
                     onChangeText={onChange}
                     value={value}
+                    autoCapitalize="none"
                   />
                 )}
               />

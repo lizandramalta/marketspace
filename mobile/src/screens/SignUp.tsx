@@ -1,6 +1,12 @@
 import { Button, Input, PickAvatarButton } from '@components/index'
 import { Center, Text, VStack } from '@gluestack-ui/themed'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useAuth } from '@hooks/useAuth'
+import { useToast } from '@hooks/useToast'
+import { UserService } from '@services/userService'
+import { AppError } from '@utils/AppError'
+import { ImageUtils } from '@utils/imageUtils'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as yup from 'yup'
@@ -33,6 +39,10 @@ const formSchema = yup.object({
 })
 
 export function SignUp({ navigation }: AuthScreenProps<'SingUp'>) {
+  const [avatarUri, setAvatarUri] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const { signIn } = useAuth()
+  const toast = useToast()
   const {
     control,
     handleSubmit,
@@ -43,8 +53,21 @@ export function SignUp({ navigation }: AuthScreenProps<'SingUp'>) {
     navigation.goBack()
   }
 
-  function handleCreateAccount(data: FormDataProps) {
-    console.log(data)
+  async function handleCreateAccount(data: FormDataProps) {
+    try {
+      setIsLoading(true)
+      const avatar = ImageUtils.getImageFileInfo(data.name, avatarUri)
+      await UserService.createUser({ ...data, avatar })
+      signIn(data)
+    } catch (error) {
+      setIsLoading(false)
+      if (error instanceof AppError) {
+        toast.show({
+          id: 'create-user-toast',
+          title: error.message
+        })
+      }
+    }
   }
 
   return (
@@ -78,7 +101,7 @@ export function SignUp({ navigation }: AuthScreenProps<'SingUp'>) {
           </Center>
           <VStack gap="$6">
             <Center gap="$3">
-              <PickAvatarButton onPickAvatar={() => {}} />
+              <PickAvatarButton onPickAvatar={setAvatarUri} />
               <Controller
                 control={control}
                 name="name"
@@ -101,6 +124,7 @@ export function SignUp({ navigation }: AuthScreenProps<'SingUp'>) {
                     onChangeText={onChange}
                     errorMessage={errors.email?.message}
                     keyboardType="email-address"
+                    autoCapitalize="none"
                   />
                 )}
               />
@@ -148,7 +172,11 @@ export function SignUp({ navigation }: AuthScreenProps<'SingUp'>) {
                 )}
               />
             </Center>
-            <Button title="Criar" onPress={handleSubmit(handleCreateAccount)} />
+            <Button
+              title="Criar"
+              onPress={handleSubmit(handleCreateAccount)}
+              isLoading={isLoading}
+            />
           </VStack>
           <Center gap="$4">
             <Text

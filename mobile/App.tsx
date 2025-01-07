@@ -9,6 +9,7 @@ import { Routes } from '@routes/index'
 import { config } from './config/gluestack-ui.config'
 import { Loading } from '@components/Loading'
 import { StatusBar } from 'react-native'
+import { AuthProvider } from '@contexts/authContext'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -19,12 +20,14 @@ export default function App() {
 
   return (
     <GluestackUIProvider config={config}>
-      <StatusBar
-        barStyle="dark-content"
-        translucent
-        backgroundColor="transparent"
-      />
-      {fontsLoaded ? <Routes /> : <Loading />}
+      <AuthProvider>
+        <StatusBar
+          barStyle="dark-content"
+          translucent
+          backgroundColor="transparent"
+        />
+        {fontsLoaded ? <Routes /> : <Loading />}
+      </AuthProvider>
     </GluestackUIProvider>
   )
 }

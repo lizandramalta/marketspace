@@ -1,9 +1,19 @@
-import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
+import * as ImagePicker from 'expo-image-picker'
 import { AppError } from './AppError'
 
 type ImageInfo = {
   size: number
+}
+
+function getImageFileInfo(userName: string, uri: string) {
+  const fileExtension = uri.split('.').pop()
+
+  return {
+    name: `${userName.trim()}.${fileExtension}`.toLowerCase(),
+    uri,
+    type: `image/${fileExtension}`
+  }
 }
 
 async function pickImage() {
@@ -32,5 +42,6 @@ async function pickImage() {
 }
 
 export const ImageUtils = {
+  getImageFileInfo,
   pickImage
 }
