@@ -4,7 +4,7 @@ CREATE TABLE "Products" (
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "is_new" BOOLEAN NOT NULL,
-    "price" INTEGER NOT NULL,
+    "price" DECIMAL NOT NULL,
     "accept_trade" BOOLEAN NOT NULL,
     "payment_methods" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,

@@ -4,7 +4,7 @@ import {
   FormControlErrorText,
   InputField
 } from '@gluestack-ui/themed'
-import { ComponentProps, useEffect, useState } from 'react'
+import { ComponentProps, ReactNode, useEffect, useState } from 'react'
 import { Input as GluestackInput } from '@gluestack-ui/themed'
 import { Icon } from './Icon'
 import { TouchableOpacity } from 'react-native'
@@ -14,6 +14,7 @@ type Props = ComponentProps<typeof InputField> & {
   errorMessage?: string
   isPasswordInput?: boolean
   mask?: 'phone'
+  rightComponet?: ReactNode
 }
 
 export function Input({
@@ -22,6 +23,7 @@ export function Input({
   children,
   mask,
   onChangeText,
+  rightComponet,
   ...rest
 }: Props) {
   const [isShowingPassword, setIsShowingPassword] = useState(false)
@@ -108,6 +110,7 @@ export function Input({
             <Icon as={isShowingPassword ? 'EyeSlash' : 'Eye'} />
           </TouchableOpacity>
         )}
+        {rightComponet && rightComponet}
       </GluestackInput>
       <FormControlError>
         <FormControlErrorText color="$redLight">{error}</FormControlErrorText>

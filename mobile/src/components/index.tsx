@@ -1,3 +1,5 @@
+export { AdCard } from './AdCard'
+export { Avatar } from './Avatar'
 export { Button } from './Button'
 export { Icon } from './Icon'
 export { Input } from './Input'

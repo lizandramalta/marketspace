@@ -10,6 +10,7 @@ export const customizedColors = {
 
   blue: '#364D9D',
   blueLight: '#647AC7',
+  blueLightWithOpacity: 'rgba(100,122,199,0.1)',
   redLight: '#EE7979',
   gray100: '#1A181B',
   gray200: '#3E3A40',
