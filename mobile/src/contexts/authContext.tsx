@@ -80,6 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await UserStorage.remove()
       await AuthStorage.removeToken()
       await AuthStorage.removeRefreshToken()
+      api.reset()
     } catch (error) {
       console.log(error)
     } finally {
@@ -125,10 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    const subscribe = api.registerInterceptTokenManager(signOut)
-    return () => {
-      subscribe()
-    }
+    api.registerInterceptTokenManager(signOut)
   }, [signOut])
 
   return (
