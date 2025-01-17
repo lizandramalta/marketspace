@@ -61,7 +61,7 @@ api.registerInterceptTokenManager = (signOut) => {
     return
   }
 
-  api.interceptors.response.use(
+  interceptTokenManager = api.interceptors.response.use(
     (response) => response,
     async (responseError) => {
       if (responseError?.response?.status === 401) {
