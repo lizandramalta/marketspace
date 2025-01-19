@@ -1,6 +1,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { CompositeScreenProps } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { ProductDTO } from '../dtos/ProductDTO'
 
 export declare global {
   type AuthParamList = {
@@ -16,7 +17,9 @@ export declare global {
 
   type AppStackParamList = {
     AdCreate: undefined
-    AdDetails: undefined
+    AdDetails: {
+      productId: string
+    }
     AdPreview: undefined
     Root: undefined
   }

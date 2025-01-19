@@ -102,7 +102,7 @@ export function Home({ navigation }: AppScreenProps<'Home'>) {
   return (
     <VStack flex={1} bgColor="$gray600" pt="$16" px="$6" gap="$8">
       <HStack alignItems="center" gap="$2">
-        <Avatar />
+        <Avatar path={user?.avatar} />
         <VStack flex={1}>
           <Text fontSize="$md" lineHeight="$md" color="$gray100">
             Boas vindas,

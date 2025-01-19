@@ -1,6 +1,8 @@
 export { AdCard } from './AdCard'
 export { Avatar } from './Avatar'
 export { Button } from './Button'
+export { Carousel } from './Carousel'
+export { Filters } from './Filters'
 export { Icon } from './Icon'
 export { Input } from './Input'
 export { Loading } from './Loading'

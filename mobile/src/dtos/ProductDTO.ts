@@ -19,7 +19,8 @@ export type ProductDTO = {
   }[]
   price: number
   product_images: ProductImage[]
-  user: Pick<UserDTO, 'avatar'>
+  user: Omit<UserDTO, 'id' | 'email'>
+  description?: string
 }
 
 export type ProductQueryParamsDTO = {

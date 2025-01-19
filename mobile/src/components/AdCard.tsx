@@ -1,18 +1,25 @@
 import { Badge, Box, Image, Text, VStack } from '@gluestack-ui/themed'
+import { useNavigation } from '@react-navigation/native'
+import { api } from '@services/api'
+import { DimensionsUtils } from '@utils/DimensionsUtils'
+import { NumberUtils } from '@utils/NumberUtils'
 import { TouchableOpacity } from 'react-native'
 import { ProductDTO } from '../dtos/ProductDTO'
-import { api } from '@services/api'
 import { Avatar } from './Avatar'
-import { NumberUtils } from '@utils/NumberUtils'
-import { DimensionsUtils } from '@utils/DimensionsUtils'
 
 type Props = {
   product: ProductDTO
 }
 
 export function AdCard({ product }: Props) {
+  const navigation = useNavigation()
+
+  function handleGoToAdDetails() {
+    navigation.navigate('AdDetails', { productId: product.id })
+  }
+
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={handleGoToAdDetails}>
       <VStack
         flex={1}
         w={DimensionsUtils.calculateSizeRelativeToFixedScreenWidth(153.5)}
@@ -39,6 +46,7 @@ export function AdCard({ product }: Props) {
             position="absolute"
             top={4}
             left={3.85}
+            path={product.user.avatar}
           />
           <Badge
             rounded="$full"

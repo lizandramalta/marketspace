@@ -1,23 +1,23 @@
 import { Image } from '@gluestack-ui/themed'
 import { useAuth } from '@hooks/useAuth'
 import { api } from '@services/api'
-import { customizedColors } from '../../config/gluestack-ui.config'
 import { ComponentProps } from 'react'
 
-type Props = ComponentProps<typeof Image>
+type Props = ComponentProps<typeof Image> & {
+  path?: string
+  size?: number
+}
 
-export function Avatar({ ...rest }: Props) {
-  const { user } = useAuth()
-
+export function Avatar({ path, size, ...rest }: Props) {
   return (
     <Image
       rounded="$full"
-      w={45}
-      h={45}
+      w={size ?? 45}
+      h={size ?? 45}
       borderWidth={3}
       borderColor="$blueLight"
-      source={{ uri: `${api.defaults.baseURL}/images/${user?.avatar}` }}
-      defaultSource={{ uri: `${api.defaults.baseURL}/images/${user?.avatar}` }}
+      source={{ uri: `${api.defaults.baseURL}/images/${path}` }}
+      defaultSource={{ uri: `${api.defaults.baseURL}/images/${path}` }}
       alt="Foto do usuário"
       {...rest}
     />

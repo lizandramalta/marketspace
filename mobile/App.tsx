@@ -1,3 +1,6 @@
+import { Loading } from '@components/Loading'
+import { AuthProvider } from '@contexts/authContext'
+import { NavigatorOptionsProvider } from '@contexts/navigatorOptionsContext'
 import {
   Karla_300Light,
   Karla_400Regular,
@@ -6,12 +9,9 @@ import {
 } from '@expo-google-fonts/karla'
 import { GluestackUIProvider } from '@gluestack-ui/themed'
 import { Routes } from '@routes/index'
-import { config } from './config/gluestack-ui.config'
-import { Loading } from '@components/Loading'
 import { StatusBar } from 'react-native'
-import { AuthProvider } from '@contexts/authContext'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { NavigatorOptionsProvider } from '@contexts/navigatorOptionsContext'
+import { config } from './config/gluestack-ui.config'
 
 export default function App() {
   const [fontsLoaded] = useFonts({

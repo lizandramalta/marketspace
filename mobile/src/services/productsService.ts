@@ -34,7 +34,23 @@ async function listUserProducts(): Promise<ProductDTO[]> {
   }
 }
 
+async function getProductById(id: string): Promise<ProductDTO> {
+  try {
+    const { data } = await api.get(`/products/${id}`)
+    return data
+  } catch (error) {
+    console.log(error)
+    if (error instanceof AppError) {
+      throw error
+    }
+    throw new AppError(
+      'Não foi detalhar esse produto. Tente novamente mais tarde.'
+    )
+  }
+}
+
 export const ProductsService = {
   listProducts,
-  listUserProducts
+  listUserProducts,
+  getProductById
 }
