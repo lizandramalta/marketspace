@@ -2,7 +2,6 @@ import { AnimationResolver } from '@gluestack-style/animation-resolver'
 import { MotionAnimationDriver } from '@gluestack-style/legend-motion-animation-driver'
 import { createConfig, createComponents } from '@gluestack-style/react'
 import * as componentsTheme from './theme'
-import { Karla_400Regular, Karla_700Bold } from '@expo-google-fonts/karla'
 
 export const customizedColors = {
   white: '#FFFFFF',

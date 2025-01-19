@@ -25,6 +25,6 @@ export type ProductDTO = {
 export type ProductQueryParamsDTO = {
   is_new?: boolean
   accept_trade?: boolean
-  payment_methods?: PaymentMethods
+  payment_methods?: PaymentMethods[]
   query?: string
 }

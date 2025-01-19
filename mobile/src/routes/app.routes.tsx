@@ -1,5 +1,6 @@
 import { Icon, IconColor } from '@components/Icon'
 import { useToken } from '@gluestack-style/react'
+import { useNavigatorOptions } from '@hooks/useNavigatorOptions'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
@@ -18,6 +19,7 @@ const StackNavigator = createNativeStackNavigator<AppStackParamList>()
 function BottomTabNavigation() {
   const insets = useSafeAreaInsets()
   const tabBarBackgroundColor = useToken('colors', 'gray700')
+  const { isShowingTabBar } = useNavigatorOptions()
 
   return (
     <TabNavigator.Navigator
@@ -28,7 +30,8 @@ function BottomTabNavigation() {
           backgroundColor: tabBarBackgroundColor,
           paddingTop: 20,
           paddingBottom: insets.bottom + 28,
-          height: 72
+          height: 72,
+          display: isShowingTabBar ? 'flex' : 'none'
         },
         tabBarShowLabel: false,
         tabBarActiveTintColor: 'gray200' as IconColor,
