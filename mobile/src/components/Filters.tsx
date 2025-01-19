@@ -8,6 +8,7 @@ import {
   HStack,
   Switch,
   Text,
+  useToken,
   VStack
 } from '@gluestack-ui/themed'
 import BottomSheet, {
@@ -23,11 +24,11 @@ import {
   useRef,
   useState
 } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { ScrollView, TouchableOpacity } from 'react-native'
 import { PaymentMethods, ProductQueryParamsDTO } from '../dtos/ProductDTO'
 import { Button } from './Button'
-import { Icon } from './Icon'
 import { ConditionTagFilter } from './ConditionTagFilter'
+import { Icon } from './Icon'
 
 const paymentMethodsOptions: PaymentMethodsOption[] = [
   {
@@ -80,6 +81,7 @@ export const Filters = forwardRef(
       PaymentMethods[]
     >([])
     const { hideTabBar, showTabBar } = useNavigatorOptions()
+    const handleBottomSheetBackgroundColor = useToken('colors', 'gray600')
 
     function showMoreFilters() {
       hideTabBar()
@@ -170,24 +172,27 @@ export const Filters = forwardRef(
           width: 56,
           backgroundColor: '#9F9BA1'
         }}
+        handleStyle={{
+          backgroundColor: handleBottomSheetBackgroundColor
+        }}
       >
         <BottomSheetView style={{ flex: 1 }}>
-          <VStack
-            flex={1}
-            py="$8"
-            px="$6"
-            gap="$16"
-            justifyContent="space-between"
-          >
-            <VStack gap="$6">
-              <HStack justifyContent="space-between" alignItems="center">
-                <Text fontFamily="$heading" color="$gray100" fontSize="$xl">
-                  Filtrar anúncios
-                </Text>
-                <TouchableOpacity onPress={handleClose}>
-                  <Icon as="X" color="gray400" />
-                </TouchableOpacity>
-              </HStack>
+          <VStack py="$8" px="$6" bgColor="$gray600" flex={1} gap="$6">
+            <HStack justifyContent="space-between" alignItems="center">
+              <Text fontFamily="$heading" color="$gray100" fontSize="$xl">
+                Filtrar anúncios
+              </Text>
+              <TouchableOpacity onPress={handleClose}>
+                <Icon as="X" color="gray400" />
+              </TouchableOpacity>
+            </HStack>
+            <ScrollView
+              style={{ flexGrow: 1 }}
+              contentContainerStyle={{
+                gap: 24
+              }}
+              showsVerticalScrollIndicator={false}
+            >
               <VStack gap="$3">
                 <Text fontFamily="$heading" color="$gray200" fontSize="$sm">
                   Condição
@@ -252,7 +257,8 @@ export const Filters = forwardRef(
                   </VStack>
                 </CheckboxGroup>
               </VStack>
-            </VStack>
+            </ScrollView>
+
             <HStack gap="$3">
               <Button
                 title="Resetar filtros"

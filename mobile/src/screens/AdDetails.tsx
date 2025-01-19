@@ -1,10 +1,6 @@
-import { Avatar } from '@components/Avatar'
-import { Button } from '@components/Button'
-import { Icon } from '@components/Icon'
-import { Loading } from '@components/Loading'
-import { Box, Center, HStack, Image, Text, VStack } from '@gluestack-ui/themed'
+import { Avatar, Button, Carousel, Icon, Loading } from '@components/index'
+import { Box, Center, HStack, Text, VStack } from '@gluestack-ui/themed'
 import { useToast } from '@hooks/useToast'
-import { api } from '@services/api'
 import { ProductsService } from '@services/productsService'
 import { AppError } from '@utils/AppError'
 import { NumberUtils } from '@utils/NumberUtils'
@@ -12,7 +8,6 @@ import * as PhosphorIcons from 'phosphor-react-native'
 import { useEffect, useState } from 'react'
 import { Linking, ScrollView, TouchableOpacity } from 'react-native'
 import { PaymentMethods, ProductDTO } from '../dtos/ProductDTO'
-import { Carousel } from '@components/Carousel'
 
 function getPaymentMethodIcon(key: PaymentMethods): keyof typeof PhosphorIcons {
   switch (key) {
