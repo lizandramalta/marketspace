@@ -31,6 +31,10 @@ export function Home({ navigation }: AppScreenProps<'Home'>) {
     setQuerySearch('')
   }
 
+  function handleGoToUserAds() {
+    navigation.navigate('UserAds')
+  }
+
   function InputButtons() {
     return (
       <HStack alignItems="center" gap={3}>
@@ -70,7 +74,7 @@ export function Home({ navigation }: AppScreenProps<'Home'>) {
     } catch (error) {
       if (error instanceof AppError) {
         toast.show({
-          id: 'list-ads-toast',
+          id: 'list-user-ads-toast',
           title: error.message
         })
       }
@@ -148,7 +152,7 @@ export function Home({ navigation }: AppScreenProps<'Home'>) {
               </Text>
             </VStack>
           </HStack>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleGoToUserAds}>
             <HStack gap="$2" alignItems="center">
               <Text
                 fontSize="$xs"

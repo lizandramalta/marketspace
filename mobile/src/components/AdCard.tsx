@@ -9,10 +9,12 @@ import { Avatar } from './Avatar'
 
 type Props = {
   product: ProductDTO
+  hideUserPhoto?: boolean
 }
 
-export function AdCard({ product }: Props) {
+export function AdCard({ product, hideUserPhoto }: Props) {
   const navigation = useNavigation()
+  const inactive = product.is_active ? !product.is_active : false
 
   function handleGoToAdDetails() {
     navigation.navigate('AdDetails', { productId: product.id })
@@ -25,7 +27,7 @@ export function AdCard({ product }: Props) {
         w={DimensionsUtils.calculateSizeRelativeToFixedScreenWidth(153.5)}
         mb="$6"
       >
-        <Box>
+        <Box rounded="$md">
           <Image
             source={{
               uri: `${api.defaults.baseURL}/images/${product.product_images[0].path}`
@@ -39,15 +41,43 @@ export function AdCard({ product }: Props) {
             h={100}
             w="$full"
           />
-          <Avatar
-            w={23}
-            h="$6"
-            borderColor="$gray700"
-            position="absolute"
-            top={4}
-            left={3.85}
-            path={product.user.avatar}
-          />
+          {inactive && (
+            <Box
+              rounded="$md"
+              h={100}
+              w="$full"
+              position="absolute"
+              top={0}
+              backgroundColor="$gray100"
+              opacity={0.5}
+              zIndex={1}
+            />
+          )}
+          {inactive && (
+            <Text
+              fontSize={11}
+              fontFamily="$heading"
+              color="$gray700"
+              position="absolute"
+              bottom={8}
+              left={8}
+              zIndex={2}
+              textTransform="uppercase"
+            >
+              Anúncio desativado
+            </Text>
+          )}
+          {!hideUserPhoto && (
+            <Avatar
+              w={23}
+              h="$6"
+              borderColor="$gray700"
+              position="absolute"
+              top={4}
+              left={3.85}
+              path={product.user.avatar}
+            />
+          )}
           <Badge
             rounded="$full"
             px="$2"
@@ -65,7 +95,7 @@ export function AdCard({ product }: Props) {
         <Text
           fontSize="$sm"
           lineHeight="$sm"
-          color="$gray200"
+          color={inactive ? '$gray400' : '$gray200'}
           ml="$0.5"
           mt="$2"
         >
@@ -75,7 +105,7 @@ export function AdCard({ product }: Props) {
           fontSize="$md"
           lineHeight="$md"
           fontFamily="$heading"
-          color="$gray100"
+          color={inactive ? '$gray400' : '$gray100'}
           ml="$0.5"
         >
           <Text fontSize="$xs">R$</Text>{' '}
