@@ -49,8 +49,41 @@ async function getProductById(id: string): Promise<ProductDTO> {
   }
 }
 
+async function patchProductActiveStatus(
+  id: string,
+  active: boolean
+): Promise<void> {
+  try {
+    return await api.patch(`/products/${id}`, { is_active: active })
+  } catch (error) {
+    console.log(error)
+    if (error instanceof AppError) {
+      throw error
+    }
+    throw new AppError(
+      'Não foi atualizar o status do produto. Tente novamente mais tarde.'
+    )
+  }
+}
+
+async function deleteProductById(id: string): Promise<void> {
+  try {
+    return await api.delete(`/products/${id}`)
+  } catch (error) {
+    console.log(error)
+    if (error instanceof AppError) {
+      throw error
+    }
+    throw new AppError(
+      'Não foi excluir esse produto. Tente novamente mais tarde.'
+    )
+  }
+}
+
 export const ProductsService = {
   listProducts,
   listUserProducts,
-  getProductById
+  getProductById,
+  patchProductActiveStatus,
+  deleteProductById
 }

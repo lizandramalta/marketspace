@@ -93,7 +93,9 @@ export function UserAds() {
         ) : (
           <FlatList
             data={ads}
-            renderItem={({ item }) => <AdCard product={item} hideUserPhoto />}
+            renderItem={({ item }) => (
+              <AdCard product={item} hideUserPhoto isUserAd />
+            )}
             keyExtractor={(item) => item.id}
             numColumns={2}
             showsVerticalScrollIndicator={false}

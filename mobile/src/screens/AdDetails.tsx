@@ -33,10 +33,12 @@ function getPaymentMethodIcon(key: PaymentMethods): keyof typeof PhosphorIcons {
 }
 
 export function AdDetails({ navigation, route }: AppScreenProps<'AdDetails'>) {
-  const { productId } = route.params
+  const { productId, isUserAd } = route.params
   const [product, setProduct] = useState<ProductDTO>({} as ProductDTO)
   const [isLoading, setIsLoading] = useState(true)
   const toast = useToast()
+  const inactive =
+    product.is_active !== undefined ? !product.is_active : undefined
 
   function handleGoBack() {
     navigation.goBack()
@@ -56,6 +58,40 @@ export function AdDetails({ navigation, route }: AppScreenProps<'AdDetails'>) {
         id: 'wpp-link-error-toast',
         title: 'Não foi possível entrar em contato com o vendedor.'
       })
+    }
+  }
+
+  async function handleDeleteProduct() {
+    try {
+      await ProductsService.deleteProductById(productId)
+      toast.show({
+        id: 'delete-product-success-toast',
+        title: 'Anúncio excluído com succeso.',
+        action: 'success'
+      })
+      navigation.goBack()
+    } catch (error) {
+      if (error instanceof AppError) {
+        toast.show({
+          id: 'delete-product-error-toast',
+          title: error.message
+        })
+      }
+    }
+  }
+
+  async function handleChangeProductActiveStatus(active: boolean) {
+    try {
+      setIsLoading(true)
+      await ProductsService.patchProductActiveStatus(productId, active)
+      fetchProduct()
+    } catch (error) {
+      if (error instanceof AppError) {
+        toast.show({
+          id: 'product-change-active-status-toast',
+          title: error.message
+        })
+      }
     }
   }
 
@@ -85,13 +121,42 @@ export function AdDetails({ navigation, route }: AppScreenProps<'AdDetails'>) {
     </Center>
   ) : (
     <VStack flex={1} pt="$16" bgColor="$gray600">
-      <VStack px="$6" pb="$3">
+      <HStack
+        px="$6"
+        pb="$3"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <TouchableOpacity onPress={handleGoBack}>
           <Icon as="ArrowLeft" />
         </TouchableOpacity>
-      </VStack>
+        {isUserAd && (
+          <TouchableOpacity>
+            <Icon as="PencilSimpleLine" />
+          </TouchableOpacity>
+        )}
+      </HStack>
       <ScrollView style={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <Carousel data={product.product_images} />
+        {inactive && (
+          <Center
+            w="$full"
+            h={378}
+            bgColor="$gray100"
+            opacity={0.8}
+            position="absolute"
+            top={0}
+          >
+            <Text
+              fontFamily="$heading"
+              fontSize="$sm"
+              color="$gray700"
+              textTransform="uppercase"
+            >
+              Anúncio desativado
+            </Text>
+          </Center>
+        )}
         <VStack px="$6" pt="$5">
           <HStack alignItems="center" gap="$2" mb="$5">
             <Avatar path={product.user.avatar} />
@@ -163,38 +228,64 @@ export function AdDetails({ navigation, route }: AppScreenProps<'AdDetails'>) {
               </VStack>
             </VStack>
           </VStack>
+          {isUserAd && (
+            <VStack gap="$2" mt="$6">
+              {inactive ? (
+                <Button
+                  title="Reativar anúncio"
+                  icon="Power"
+                  theme="blue"
+                  onPress={() => handleChangeProductActiveStatus(true)}
+                />
+              ) : (
+                <Button
+                  title="Desativar anúncio"
+                  icon="Power"
+                  onPress={() => handleChangeProductActiveStatus(false)}
+                />
+              )}
+              <Button
+                title="Excluir anúncio"
+                theme="gray"
+                icon="TrashSimple"
+                onPress={handleDeleteProduct}
+              />
+            </VStack>
+          )}
         </VStack>
       </ScrollView>
-      <HStack
-        position="absolute"
-        bottom={0}
-        bgColor="$gray700"
-        pt="$5"
-        pb="$8"
-        px="$6"
-        justifyContent="space-between"
-        alignItems="center"
-        w="$full"
-      >
-        <Text fontSize="$sm" fontFamily="$heading" color="$blue" flex={1}>
-          R${' '}
-          <Text
-            fontSize="$2xl"
-            fontFamily="$heading"
-            color="$blue"
-            numberOfLines={1}
-          >
-            {NumberUtils.formatToReal(product.price)}
+      {!isUserAd && (
+        <HStack
+          position="absolute"
+          bottom={0}
+          bgColor="$gray700"
+          pt="$5"
+          pb="$8"
+          px="$6"
+          justifyContent="space-between"
+          alignItems="center"
+          w="$full"
+        >
+          <Text fontSize="$sm" fontFamily="$heading" color="$blue" flex={1}>
+            R${' '}
+            <Text
+              fontSize="$2xl"
+              fontFamily="$heading"
+              color="$blue"
+              numberOfLines={1}
+            >
+              {NumberUtils.formatToReal(product.price)}
+            </Text>
           </Text>
-        </Text>
-        <Button
-          title="Entrar em contato"
-          icon="WhatsappLogo"
-          theme="blue"
-          onPress={handleWppContact}
-          flex={1}
-        />
-      </HStack>
+          <Button
+            title="Entrar em contato"
+            icon="WhatsappLogo"
+            theme="blue"
+            onPress={handleWppContact}
+            flex={1}
+          />
+        </HStack>
+      )}
     </VStack>
   )
 }

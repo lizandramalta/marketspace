@@ -10,14 +10,16 @@ import { Avatar } from './Avatar'
 type Props = {
   product: ProductDTO
   hideUserPhoto?: boolean
+  isUserAd?: boolean
 }
 
-export function AdCard({ product, hideUserPhoto }: Props) {
+export function AdCard({ product, hideUserPhoto, isUserAd }: Props) {
   const navigation = useNavigation()
-  const inactive = product.is_active ? !product.is_active : false
+  const inactive =
+    product.is_active !== undefined ? !product.is_active : undefined
 
   function handleGoToAdDetails() {
-    navigation.navigate('AdDetails', { productId: product.id })
+    navigation.navigate('AdDetails', { productId: product.id, isUserAd })
   }
 
   return (

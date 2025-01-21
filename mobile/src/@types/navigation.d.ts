@@ -19,6 +19,7 @@ export declare global {
     AdCreate: undefined
     AdDetails: {
       productId: string
+      isUserAd?: boolean
     }
     AdPreview: undefined
     Root: undefined
