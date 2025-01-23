@@ -29,29 +29,8 @@ import { PaymentMethods, ProductQueryParamsDTO } from '../dtos/ProductDTO'
 import { Button } from './Button'
 import { ConditionTagFilter } from './ConditionTagFilter'
 import { Icon } from './Icon'
-
-const paymentMethodsOptions: PaymentMethodsOption[] = [
-  {
-    key: 'boleto',
-    label: 'Boleto'
-  },
-  {
-    key: 'pix',
-    label: 'Pix'
-  },
-  {
-    key: 'cash',
-    label: 'Dinheiro'
-  },
-  {
-    key: 'card',
-    label: 'Cartão de Crédito'
-  },
-  {
-    key: 'deposit',
-    label: 'Deposito Bancário'
-  }
-]
+import { AcceptTradeSwitchInput } from './AcceptTradeSwitchInput'
+import { PaymentMethodsCheckboxInput } from './PaymentMethodsCheckboxInput'
 
 export type FiltersRef = {
   showMoreFilters: () => void
@@ -61,11 +40,6 @@ type FiltersProps = {
   onApplyFilters: (filters: ProductQueryParamsDTO) => void
   onResetFilters: () => void
   activeFilters?: ProductQueryParamsDTO
-}
-
-type PaymentMethodsOption = {
-  key: PaymentMethods
-  label: string
 }
 
 export const Filters = forwardRef(
@@ -210,53 +184,16 @@ export const Filters = forwardRef(
                   />
                 </HStack>
               </VStack>
-              <VStack gap="$3">
-                <Text fontFamily="$heading" color="$gray200" fontSize="$sm">
-                  Aceita troca?
-                </Text>
-                <Switch
-                  thumbColor="$gray700"
-                  trackColor={{ false: '$gray500', true: '$blueLight' }}
-                  ios_backgroundColor="$gray500"
-                  value={acceptTradeFilter}
-                  onToggle={() => setAcceptTradeFilter(!acceptTradeFilter)}
-                />
-              </VStack>
-              <VStack gap="$3">
-                <Text fontFamily="$heading" color="$gray200" fontSize="$sm">
-                  Meios de pagamento aceitos
-                </Text>
-                <CheckboxGroup
-                  value={paymentMethodsFilter}
-                  onChange={(keys) => {
-                    setPaymentMethodsFilter(keys)
-                  }}
-                >
-                  <VStack gap="$2">
-                    {paymentMethodsOptions.map(({ key, label }) => (
-                      <Checkbox value={key} key={key}>
-                        <CheckboxIndicator
-                          mr="$2"
-                          borderColor="$gray400"
-                          $checked={{
-                            borderColor: '$blueLight',
-                            bgColor: '$blueLight'
-                          }}
-                        >
-                          <CheckboxIcon as={CheckIcon} color="$white" />
-                        </CheckboxIndicator>
-                        <CheckboxLabel
-                          color="$gray200"
-                          fontSize="$md"
-                          $checked-color="$gray200"
-                        >
-                          {label}
-                        </CheckboxLabel>
-                      </Checkbox>
-                    ))}
-                  </VStack>
-                </CheckboxGroup>
-              </VStack>
+              <AcceptTradeSwitchInput
+                value={acceptTradeFilter}
+                onToggle={() => setAcceptTradeFilter(!acceptTradeFilter)}
+              />
+              <PaymentMethodsCheckboxInput
+                value={paymentMethodsFilter}
+                onChange={(keys) => {
+                  setPaymentMethodsFilter(keys)
+                }}
+              />
             </ScrollView>
 
             <HStack gap="$3">

@@ -30,11 +30,15 @@ const selectionData = [
   }
 ]
 
-export function UserAds() {
+export function UserAds({ navigation }: AppScreenProps<'UserAds'>) {
   const [isLoading, setIsLoading] = useState(true)
   const [ads, setAds] = useState<ProductDTO[]>()
   const toast = useToast()
   const [filterSelection, setFilterSelection] = useState(selectionData[0])
+
+  function handleGoToAdCreate() {
+    navigation.navigate('AdCreate')
+  }
 
   async function fetchUserAds() {
     try {
@@ -69,10 +73,10 @@ export function UserAds() {
     <VStack flex={1} bgColor="$gray600" pt="$16" px="$6" gap="$8">
       <HStack alignItems="center" justifyContent="space-between">
         <Box w="$6" h="$6" />
-        <Heading flex={1} textAlign="center">
+        <Heading flex={1} textAlign="center" color="$gray100">
           Meus anúncios
         </Heading>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleGoToAdCreate}>
           <Icon as="Plus" />
         </TouchableOpacity>
       </HStack>
@@ -99,8 +103,14 @@ export function UserAds() {
             keyExtractor={(item) => item.id}
             numColumns={2}
             showsVerticalScrollIndicator={false}
+            style={{
+              flexGrow: 1
+            }}
             columnWrapperStyle={{
               justifyContent: 'space-between'
+            }}
+            contentContainerStyle={{
+              paddingBottom: 124
             }}
             ListEmptyComponent={() => (
               <Center mt="$10">

@@ -1,4 +1,4 @@
-export function formatToReal(value: number): string {
+function formatToReal(value: number): string {
   return value
     .toLocaleString('pt-BR', {
       style: 'currency',
@@ -8,6 +8,11 @@ export function formatToReal(value: number): string {
     .trim()
 }
 
+function parseMoney(value: string): number {
+  return Number(value.replaceAll('.', '').replace(',', '.'))
+}
+
 export const NumberUtils = {
-  formatToReal
+  formatToReal,
+  parseMoney
 }

@@ -4,7 +4,7 @@ import { api } from '@services/api'
 import { DimensionsUtils } from '@utils/DimensionsUtils'
 import { NumberUtils } from '@utils/NumberUtils'
 import { TouchableOpacity } from 'react-native'
-import { ProductDTO } from '../dtos/ProductDTO'
+import { ProductDTO, ProductImage } from '../dtos/ProductDTO'
 import { Avatar } from './Avatar'
 
 type Props = {
@@ -22,6 +22,8 @@ export function AdCard({ product, hideUserPhoto, isUserAd }: Props) {
     navigation.navigate('AdDetails', { productId: product.id, isUserAd })
   }
 
+  const images = product.product_images as ProductImage[]
+
   return (
     <TouchableOpacity onPress={handleGoToAdDetails}>
       <VStack
@@ -32,10 +34,10 @@ export function AdCard({ product, hideUserPhoto, isUserAd }: Props) {
         <Box rounded="$md">
           <Image
             source={{
-              uri: `${api.defaults.baseURL}/images/${product.product_images[0].path}`
+              uri: `${api.defaults.baseURL}/images/${images[0].path}`
             }}
             defaultSource={{
-              uri: `${api.defaults.baseURL}/images/${product.product_images[0].path}`
+              uri: `${api.defaults.baseURL}/images/${images[0].path}`
             }}
             alt={`Foto do produto ${product.name}`}
             rounded="$md"

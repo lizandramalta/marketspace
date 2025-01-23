@@ -1,6 +1,10 @@
 import { AppError } from '@utils/AppError'
 import { api } from './api'
-import { ProductDTO, ProductQueryParamsDTO } from '../dtos/ProductDTO'
+import {
+  ProductCreateDTO,
+  ProductDTO,
+  ProductQueryParamsDTO
+} from '../dtos/ProductDTO'
 
 async function listProducts(
   queryParams?: ProductQueryParamsDTO
@@ -80,10 +84,48 @@ async function deleteProductById(id: string): Promise<void> {
   }
 }
 
+async function createProduct(data: ProductCreateDTO): Promise<ProductDTO> {
+  try {
+    const { data: response } = await api.post(`/products/`, data)
+    return response
+  } catch (error) {
+    console.log(error)
+    if (error instanceof AppError) {
+      throw error
+    }
+    throw new AppError(
+      'Não foi criar esse anúncio. Tente novamente mais tarde.'
+    )
+  }
+}
+
+async function addProductImage(id: string, images: any[]): Promise<void> {
+  try {
+    const formData = new FormData()
+    formData.append('product_id', id)
+    images.forEach((image) => {
+      formData.append('images', image)
+    })
+    await api.post(`/products/images`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  } catch (error) {
+    console.log(error)
+    if (error instanceof AppError) {
+      throw error
+    }
+    throw new AppError(
+      'Não foi adicionar imagens ao anúncio. Tente novamente mais tarde.'
+    )
+  }
+}
+
 export const ProductsService = {
   listProducts,
   listUserProducts,
   getProductById,
   patchProductActiveStatus,
-  deleteProductById
+  deleteProductById,
+  createProduct,
+  addProductImage
 }

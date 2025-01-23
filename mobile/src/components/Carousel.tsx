@@ -4,9 +4,7 @@ import React, { useRef, useState } from 'react'
 import { FlatList, useWindowDimensions, ViewToken } from 'react-native'
 
 type Props = {
-  data: {
-    path: string
-  }[]
+  data: string[]
 }
 
 export function Carousel({ data }: Props) {
@@ -42,10 +40,10 @@ export function Carousel({ data }: Props) {
         renderItem={({ item }) => (
           <Image
             source={{
-              uri: `${api.defaults.baseURL}/images/${item.path}`
+              uri: item
             }}
             defaultSource={{
-              uri: `${api.defaults.baseURL}/images/${item.path}`
+              uri: item
             }}
             w={width}
             height={378}
@@ -53,7 +51,7 @@ export function Carousel({ data }: Props) {
             resizeMode="cover"
           />
         )}
-        keyExtractor={(item) => item.path}
+        keyExtractor={(item) => item}
         showsHorizontalScrollIndicator={false}
         pagingEnabled
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}

@@ -2,19 +2,21 @@ import {
   FormControl,
   FormControlError,
   FormControlErrorText,
+  Input as GluestackInput,
   InputField
 } from '@gluestack-ui/themed'
-import { ComponentProps, ReactNode, useEffect, useState } from 'react'
-import { Input as GluestackInput } from '@gluestack-ui/themed'
-import { Icon } from './Icon'
-import { TouchableOpacity } from 'react-native'
 import { MaskUtils } from '@utils/MaskUtils'
+import { ComponentProps, ReactNode, useEffect, useState } from 'react'
+import { TouchableOpacity } from 'react-native'
+import { Icon } from './Icon'
 
 type Props = ComponentProps<typeof InputField> & {
   errorMessage?: string
   isPasswordInput?: boolean
-  mask?: 'phone'
-  rightComponet?: ReactNode
+  mask?: 'phone' | 'money'
+  leftComponent?: ReactNode
+  rightComponent?: ReactNode
+  textArea?: boolean
 }
 
 export function Input({
@@ -23,7 +25,9 @@ export function Input({
   children,
   mask,
   onChangeText,
-  rightComponet,
+  leftComponent,
+  rightComponent,
+  textArea,
   ...rest
 }: Props) {
   const [isShowingPassword, setIsShowingPassword] = useState(false)
@@ -53,6 +57,9 @@ export function Input({
       case 'phone': {
         return MaskUtils.phoneMask(value)
       }
+      case 'money': {
+        return MaskUtils.moneyMask(value)
+      }
       default: {
         return value
       }
@@ -61,7 +68,11 @@ export function Input({
 
   function handleChange(text: string) {
     const maskedValue = mask ? applyMask(text) : text
-    onChangeText?.(maskedValue)
+    if (maskedValue == '0,00') {
+      onChangeText?.('')
+    } else {
+      onChangeText?.(maskedValue)
+    }
   }
 
   useEffect(() => {
@@ -72,7 +83,7 @@ export function Input({
   return (
     <FormControl isInvalid={isInvalid}>
       <GluestackInput
-        height={45}
+        height={textArea ? 160 : 45}
         gap="$2"
         w="$full"
         px="$3"
@@ -89,7 +100,7 @@ export function Input({
           borderColor: '$redLight'
         }}
       >
-        {children}
+        {leftComponent && leftComponent}
         <InputField
           my="$3"
           px={0}
@@ -110,7 +121,7 @@ export function Input({
             <Icon as={isShowingPassword ? 'EyeSlash' : 'Eye'} />
           </TouchableOpacity>
         )}
-        {rightComponet && rightComponet}
+        {rightComponent && rightComponent}
       </GluestackInput>
       <FormControlError>
         <FormControlErrorText color="$redLight">{error}</FormControlErrorText>

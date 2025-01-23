@@ -35,6 +35,10 @@ export function Home({ navigation }: AppScreenProps<'Home'>) {
     navigation.navigate('UserAds')
   }
 
+  function handleGoToAdCreate() {
+    navigation.navigate('AdCreate')
+  }
+
   function InputButtons() {
     return (
       <HStack alignItems="center" gap={3}>
@@ -121,7 +125,12 @@ export function Home({ navigation }: AppScreenProps<'Home'>) {
             {user?.name.split(' ')[0]}
           </Text>
         </VStack>
-        <Button title="Criar anúncio" icon="Plus" w={139} />
+        <Button
+          title="Criar anúncio"
+          icon="Plus"
+          w={139}
+          onPress={handleGoToAdCreate}
+        />
       </HStack>
       <VStack gap="$3">
         <Text fontSize="$sm" color="$gray300">
@@ -176,7 +185,7 @@ export function Home({ navigation }: AppScreenProps<'Home'>) {
             placeholder="Buscar anúncio"
             value={querySearch}
             onChangeText={setQuerySearch}
-            rightComponet={<InputButtons />}
+            rightComponent={<InputButtons />}
           />
         </VStack>
         {isLoading ? (

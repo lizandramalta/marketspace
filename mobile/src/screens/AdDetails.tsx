@@ -1,36 +1,18 @@
-import { Avatar, Button, Carousel, Icon, Loading } from '@components/index'
-import { Box, Center, HStack, Text, VStack } from '@gluestack-ui/themed'
+import {
+  Button,
+  Icon,
+  Loading,
+  ProductDetails,
+  ProductImagesCarousel
+} from '@components/index'
+import { Center, HStack, Text, VStack } from '@gluestack-ui/themed'
 import { useToast } from '@hooks/useToast'
 import { ProductsService } from '@services/productsService'
 import { AppError } from '@utils/AppError'
 import { NumberUtils } from '@utils/NumberUtils'
-import * as PhosphorIcons from 'phosphor-react-native'
 import { useEffect, useState } from 'react'
 import { Linking, ScrollView, TouchableOpacity } from 'react-native'
-import { PaymentMethods, ProductDTO } from '../dtos/ProductDTO'
-
-function getPaymentMethodIcon(key: PaymentMethods): keyof typeof PhosphorIcons {
-  switch (key) {
-    case 'boleto': {
-      return 'Barcode'
-    }
-    case 'card': {
-      return 'CreditCard'
-    }
-    case 'cash': {
-      return 'Money'
-    }
-    case 'deposit': {
-      return 'Bank'
-    }
-    case 'pix': {
-      return 'PixLogo'
-    }
-    default: {
-      return 'Coins'
-    }
-  }
-}
+import { ProductDTO } from '../dtos/ProductDTO'
 
 export function AdDetails({ navigation, route }: AppScreenProps<'AdDetails'>) {
   const { productId, isUserAd } = route.params
@@ -132,102 +114,23 @@ export function AdDetails({ navigation, route }: AppScreenProps<'AdDetails'>) {
         </TouchableOpacity>
         {isUserAd && (
           <TouchableOpacity>
-            <Icon as="PencilSimpleLine" />
+            <Icon as="PencilSimpleLine" color="black" />
           </TouchableOpacity>
         )}
       </HStack>
-      <ScrollView style={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <Carousel data={product.product_images} />
-        {inactive && (
-          <Center
-            w="$full"
-            h={378}
-            bgColor="$gray100"
-            opacity={0.8}
-            position="absolute"
-            top={0}
-          >
-            <Text
-              fontFamily="$heading"
-              fontSize="$sm"
-              color="$gray700"
-              textTransform="uppercase"
-            >
-              Anúncio desativado
-            </Text>
-          </Center>
+      <ScrollView
+        style={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: isUserAd ? 30 : 150 }}
+      >
+        {product.product_images.length > 0 && (
+          <ProductImagesCarousel
+            images={product.product_images}
+            productInactive={inactive}
+          />
         )}
         <VStack px="$6" pt="$5">
-          <HStack alignItems="center" gap="$2" mb="$5">
-            <Avatar path={product.user.avatar} />
-            <Text fontSize="$sm" color="$gray100">
-              {product.user.name}
-            </Text>
-          </HStack>
-          <VStack gap="$2">
-            <Box
-              rounded="$full"
-              px="$2"
-              py="$0.5"
-              bgColor="$gray500"
-              alignSelf="flex-start"
-            >
-              <Text
-                fontSize="$xs"
-                lineHeight="$xs"
-                fontFamily="$heading"
-                color="$gray200"
-                textTransform="uppercase"
-              >
-                {product.is_new ? 'novo' : 'usado'}
-              </Text>
-            </Box>
-            <HStack justifyContent="space-between" alignItems="center" gap="$1">
-              <Text
-                fontSize="$xl"
-                fontFamily="$heading"
-                color="$gray100"
-                textTransform="capitalize"
-                numberOfLines={2}
-              >
-                {product.name}
-              </Text>
-              <Text fontSize="$sm" fontFamily="$heading" color="$blueLight">
-                R${' '}
-                <Text
-                  fontSize="$xl"
-                  fontFamily="$heading"
-                  color="$blueLight"
-                  numberOfLines={1}
-                >
-                  {NumberUtils.formatToReal(product.price)}
-                </Text>
-              </Text>
-            </HStack>
-            <Text fontSize="$sm" lineHeight="$sm" color="$gray200">
-              {product.description}
-            </Text>
-            <VStack gap="$4">
-              <HStack gap="$2" alignItems="center">
-                <Text fontSize="$sm" fontFamily="$heading" color="$gray200">
-                  Aceita troca?
-                </Text>
-                <Text fontSize="$sm" color="$gray200">
-                  {product.accept_trade ? 'Sim' : 'Não'}
-                </Text>
-              </HStack>
-              <VStack gap="$1">
-                {product.payment_methods.map(({ key, name }) => (
-                  <HStack gap="$2" alignItems="center" key={key}>
-                    <Icon as={getPaymentMethodIcon(key)} size={18} />
-                    <Text fontSize="$sm" color="$gray200">
-                      {name}
-                    </Text>
-                  </HStack>
-                ))}
-              </VStack>
-            </VStack>
-          </VStack>
+          <ProductDetails product={product} />
           {isUserAd && (
             <VStack gap="$2" mt="$6">
               {inactive ? (
