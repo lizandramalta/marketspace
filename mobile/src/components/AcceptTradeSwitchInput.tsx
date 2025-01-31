@@ -22,7 +22,7 @@ export function AcceptTradeSwitchInput({ errorMessage, ...rest }: Props) {
   }, [errorMessage])
 
   return (
-    <VStack gap="$3">
+    <VStack gap="$3" alignItems="flex-start">
       <Text fontFamily="$heading" color="$gray200" fontSize="$sm">
         Aceita troca?
       </Text>
