@@ -11,7 +11,11 @@ import { AppError } from '@utils/AppError'
 import { ImageUtils } from '@utils/imageUtils'
 import { useState } from 'react'
 import { ScrollView } from 'react-native'
-import { PaymentMethods } from '../dtos/ProductDTO'
+import {
+  PaymentMethods,
+  ProductCreateDTO,
+  ProductDTO
+} from '../dtos/ProductDTO'
 
 const PaymentMethodsName: Record<PaymentMethods, string> = {
   pix: 'Pix',
@@ -22,7 +26,7 @@ const PaymentMethodsName: Record<PaymentMethods, string> = {
 }
 
 export function AdPreview({ navigation, route }: AppScreenProps<'AdPreview'>) {
-  const { product } = route.params
+  const { product, deletedImages } = route.params
   const toast = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const { user } = useAuth()
@@ -36,6 +40,28 @@ export function AdPreview({ navigation, route }: AppScreenProps<'AdPreview'>) {
     navigation.goBack()
   }
 
+  async function handleEditProductImages() {
+    try {
+      if ('id' in product) {
+        if (deletedImages?.length) {
+          await ProductsService.deleteProductImages(deletedImages)
+        }
+        const images = product.product_images.filter(
+          (item) => !deletedImages?.includes(item)
+        )
+        await ProductsService.addProductImage(product.id, images)
+      }
+    } catch (error) {
+      if (
+        error instanceof AppError &&
+        error.message === 'É obrigatório o envio de imagens.'
+      ) {
+        return
+      }
+      throw error
+    }
+  }
+
   async function handleAddProductImage(id: string) {
     try {
       const images = product.product_images.map((item) =>
@@ -43,29 +69,47 @@ export function AdPreview({ navigation, route }: AppScreenProps<'AdPreview'>) {
       )
       await ProductsService.addProductImage(id, images)
     } catch (error) {
+      throw error
+    }
+  }
+
+  async function handleCreateAdd() {
+    try {
+      const data = await ProductsService.createProduct(
+        product as ProductCreateDTO
+      )
+      await handleAddProductImage(data.id)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async function handleEditAdd() {
+    try {
+      await ProductsService.editProduct(product as ProductDTO)
+      await handleEditProductImages()
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async function handlePublish() {
+    try {
+      setIsLoading(true)
+      if ('id' in product) {
+        await handleEditAdd()
+      } else {
+        handleCreateAdd()
+      }
+    } catch (error) {
       if (error instanceof AppError) {
         toast.show({
-          id: 'add-product-image-error-toast',
+          id: 'submit-ad-error-toast',
           title: error.message
         })
       }
     } finally {
       navigation.navigate('Root', { screen: 'UserAds' })
-    }
-  }
-
-  async function handleCreateAd() {
-    try {
-      setIsLoading(true)
-      const data = await ProductsService.createProduct(product)
-      handleAddProductImage(data.id)
-    } catch (error) {
-      if (error instanceof AppError) {
-        toast.show({
-          id: 'create-ad-error-toast',
-          title: error.message
-        })
-      }
     }
   }
 
@@ -128,7 +172,7 @@ export function AdPreview({ navigation, route }: AppScreenProps<'AdPreview'>) {
           theme="blue"
           flex={1}
           isLoading={isLoading}
-          onPress={handleCreateAd}
+          onPress={handlePublish}
         />
       </HStack>
     </VStack>

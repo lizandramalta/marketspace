@@ -1,4 +1,4 @@
-export { AdCreate } from './AdCreate'
+export { AdForm } from './AdForm'
 export { AdDetails } from './AdDetails'
 export { AdPreview } from './AdPreview'
 export { Home } from './Home'

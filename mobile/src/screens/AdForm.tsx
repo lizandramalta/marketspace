@@ -21,14 +21,19 @@ import { useToast } from '@hooks/useToast'
 import { AppError } from '@utils/AppError'
 import { ImageUtils } from '@utils/imageUtils'
 import { NumberUtils } from '@utils/NumberUtils'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { TouchableOpacity } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as yup from 'yup'
-import { PaymentMethods, ProductCreateDTO } from '../dtos/ProductDTO'
+import {
+  PaymentMethods,
+  ProductCreateDTO,
+  ProductImage
+} from '../dtos/ProductDTO'
+import { api } from '@services/api'
 
-type FormDataProps = {
+export type AdFormDataProps = {
   name: string
   description: string
   is_new: string
@@ -48,15 +53,27 @@ const formSchema = yup.object({
     .required('Selecione pelo menos 1 meio de pagamento.')
 })
 
-export function AdCreate({ navigation }: AppScreenProps<'AdCreate'>) {
-  const [images, setImages] = useState<string[]>([])
-  const { user } = useAuth()
+export function AdForm({ navigation, route }: AppScreenProps<'AdForm'>) {
+  const { action, formData } = route.params
+  const [productImages, setProductImages] = useState<ProductImage[]>([])
+  const [pickedImages, setPickedImages] = useState<string[]>([])
+  const [deletedImages, setDeletedImages] = useState<ProductImage[]>([])
   const toast = useToast()
   const {
     control,
     handleSubmit,
     formState: { errors }
-  } = useForm<FormDataProps>({ resolver: yupResolver(formSchema) })
+  } = useForm<AdFormDataProps>({
+    resolver: yupResolver(formSchema),
+    defaultValues: {
+      ...formData,
+      is_new: formData?.is_new ? 'yes' : 'no',
+      payment_methods: formData?.payment_methods.map((item) => item.key),
+      price: formData?.price
+        ? NumberUtils.formatToReal(formData?.price)
+        : undefined
+    }
+  })
 
   function handleGoBack() {
     navigation.goBack()
@@ -66,7 +83,7 @@ export function AdCreate({ navigation }: AppScreenProps<'AdCreate'>) {
     try {
       const selectedImage = await ImageUtils.pickImage()
       if (selectedImage.length) {
-        setImages([...images, selectedImage])
+        setPickedImages([...pickedImages, selectedImage])
       }
     } catch (error) {
       if (error instanceof AppError) {
@@ -79,20 +96,48 @@ export function AdCreate({ navigation }: AppScreenProps<'AdCreate'>) {
   }
 
   function handleRemoveImage(uri: string) {
-    const newImages = images.filter((item) => item !== uri)
-    setImages(newImages)
+    const newImages = pickedImages.filter((item) => item !== uri)
+    setPickedImages(newImages)
+    if (action === 'edit') {
+      const deletedImage = productImages.find(
+        (item) => uri.indexOf(item.path) !== -1
+      )
+      if (deletedImage) {
+        setDeletedImages([...deletedImages, deletedImage])
+      }
+    }
   }
 
-  function handleCreateAd(data: FormDataProps) {
+  function handleGoToAdPreview(data: AdFormDataProps) {
+    if (pickedImages.length === 0) {
+      toast.show({
+        id: 'required-image-error-toast',
+        title: 'É necessário enviar no mínimo uma imagem.'
+      })
+      return
+    }
     const product: ProductCreateDTO = {
       ...data,
       is_new: data.is_new === 'yes',
       price: NumberUtils.parseMoney(data.price),
-      product_images: images
+      product_images: pickedImages
     }
 
-    navigation.navigate('AdPreview', { product })
+    navigation.navigate('AdPreview', { product, deletedImages })
   }
+
+  useEffect(() => {
+    if (action === 'edit' && formData?.product_images) {
+      setPickedImages(
+        formData.product_images
+          ? formData?.product_images.map(
+              (item) => `${api.defaults.baseURL}/images/${item.path}`
+            )
+          : []
+      )
+      setProductImages(formData.product_images)
+    }
+  }, [])
 
   return (
     <VStack flex={1}>
@@ -102,7 +147,7 @@ export function AdCreate({ navigation }: AppScreenProps<'AdCreate'>) {
             <Icon as="ArrowLeft" />
           </TouchableOpacity>
           <Heading flex={1} textAlign="center" color="$gray100">
-            Criar anúncio
+            {action === 'create' ? 'Criar anúncio' : 'Editar anúncio'}
           </Heading>
           <Box w="$6" h="$6" />
         </HStack>
@@ -118,13 +163,13 @@ export function AdCreate({ navigation }: AppScreenProps<'AdCreate'>) {
                   Imagens
                 </Text>
                 <Text color="$gray300" fontSize="$sm" lineHeight="$sm">
-                  Escolha até 3 imagens para mostrar o quando o seu produto é
+                  Escolha até 3 imagens para mostrar o quanto o seu produto é
                   incrível!
                 </Text>
               </VStack>
               <HStack gap="$2" flexWrap="wrap">
-                {images.length > 0 &&
-                  images.map((item) => (
+                {pickedImages.length > 0 &&
+                  pickedImages.map((item) => (
                     <Box key={item}>
                       <Image
                         source={{ uri: item }}
@@ -163,7 +208,7 @@ export function AdCreate({ navigation }: AppScreenProps<'AdCreate'>) {
                       </Box>
                     </Box>
                   ))}
-                {images.length < 3 && (
+                {pickedImages.length < 3 && (
                   <TouchableOpacity onPress={handleAddImage}>
                     <Center w={100} h={100} rounded="$md" bgColor="$gray500">
                       <Icon as="Plus" color="gray400" />
@@ -280,7 +325,7 @@ export function AdCreate({ navigation }: AppScreenProps<'AdCreate'>) {
         <Button
           title="Avançar"
           flex={1}
-          onPress={handleSubmit(handleCreateAd)}
+          onPress={handleSubmit(handleGoToAdPreview)}
         />
       </HStack>
     </VStack>

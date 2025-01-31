@@ -4,7 +4,7 @@ import { useNavigatorOptions } from '@hooks/useNavigatorOptions'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
-  AdCreate,
+  AdForm,
   AdDetails,
   AdPreview,
   Home,
@@ -79,7 +79,7 @@ function StackNavigation() {
   return (
     <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
       <StackNavigator.Screen name="Root" component={BottomTabNavigation} />
-      <StackNavigator.Screen name="AdCreate" component={AdCreate} />
+      <StackNavigator.Screen name="AdForm" component={AdForm} />
       <StackNavigator.Screen name="AdDetails" component={AdDetails} />
       <StackNavigator.Screen name="AdPreview" component={AdPreview} />
     </StackNavigator.Navigator>

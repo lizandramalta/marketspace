@@ -37,7 +37,7 @@ export function UserAds({ navigation }: AppScreenProps<'UserAds'>) {
   const [filterSelection, setFilterSelection] = useState(selectionData[0])
 
   function handleGoToAdCreate() {
-    navigation.navigate('AdCreate')
+    navigation.navigate('AdForm', { action: 'create' })
   }
 
   async function fetchUserAds() {

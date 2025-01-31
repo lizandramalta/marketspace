@@ -3,6 +3,7 @@ import { api } from './api'
 import {
   ProductCreateDTO,
   ProductDTO,
+  ProductImage,
   ProductQueryParamsDTO
 } from '../dtos/ProductDTO'
 
@@ -99,6 +100,20 @@ async function createProduct(data: ProductCreateDTO): Promise<ProductDTO> {
   }
 }
 
+async function editProduct(data: ProductDTO): Promise<void> {
+  try {
+    await api.put(`/products/${data.id}`, data)
+  } catch (error) {
+    console.log(error)
+    if (error instanceof AppError) {
+      throw error
+    }
+    throw new AppError(
+      'Não foi editar esse anúncio. Tente novamente mais tarde.'
+    )
+  }
+}
+
 async function addProductImage(id: string, images: any[]): Promise<void> {
   try {
     const formData = new FormData()
@@ -120,6 +135,21 @@ async function addProductImage(id: string, images: any[]): Promise<void> {
   }
 }
 
+async function deleteProductImages(images: ProductImage[]): Promise<void> {
+  try {
+    const productImagesIds = images.map((item) => item.id)
+    await api.delete('/products/images', { data: { productImagesIds } })
+  } catch (error) {
+    console.log(error)
+    if (error instanceof AppError) {
+      throw error
+    }
+    throw new AppError(
+      'Não foi deletar as imagens desse anúncio. Tente novamente mais tarde.'
+    )
+  }
+}
+
 export const ProductsService = {
   listProducts,
   listUserProducts,
@@ -127,5 +157,7 @@ export const ProductsService = {
   patchProductActiveStatus,
   deleteProductById,
   createProduct,
-  addProductImage
+  addProductImage,
+  editProduct,
+  deleteProductImages
 }

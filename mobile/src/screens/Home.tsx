@@ -36,7 +36,7 @@ export function Home({ navigation }: AppScreenProps<'Home'>) {
   }
 
   function handleGoToAdCreate() {
-    navigation.navigate('AdCreate')
+    navigation.navigate('AdForm', { action: 'create' })
   }
 
   function InputButtons() {

@@ -26,6 +26,13 @@ export function AdDetails({ navigation, route }: AppScreenProps<'AdDetails'>) {
     navigation.goBack()
   }
 
+  function handleGoToAddForm() {
+    navigation.navigate('AdForm', {
+      action: 'edit',
+      formData: product
+    })
+  }
+
   async function handleWppContact() {
     const url = `https://wa.me/55${product.user.tel
       .replace('(', '')
@@ -113,7 +120,7 @@ export function AdDetails({ navigation, route }: AppScreenProps<'AdDetails'>) {
           <Icon as="ArrowLeft" />
         </TouchableOpacity>
         {isUserAd && (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleGoToAddForm}>
             <Icon as="PencilSimpleLine" color="black" />
           </TouchableOpacity>
         )}

@@ -1,4 +1,4 @@
-import { Badge, Box, Image, Text, VStack } from '@gluestack-ui/themed'
+import { Badge, Box, Center, Image, Text, VStack } from '@gluestack-ui/themed'
 import { useNavigation } from '@react-navigation/native'
 import { api } from '@services/api'
 import { DimensionsUtils } from '@utils/DimensionsUtils'
@@ -6,6 +6,7 @@ import { NumberUtils } from '@utils/NumberUtils'
 import { TouchableOpacity } from 'react-native'
 import { ProductDTO, ProductImage } from '../dtos/ProductDTO'
 import { Avatar } from './Avatar'
+import { Icon } from './Icon'
 
 type Props = {
   product: ProductDTO
@@ -32,19 +33,25 @@ export function AdCard({ product, hideUserPhoto, isUserAd }: Props) {
         mb="$6"
       >
         <Box rounded="$md">
-          <Image
-            source={{
-              uri: `${api.defaults.baseURL}/images/${images[0].path}`
-            }}
-            defaultSource={{
-              uri: `${api.defaults.baseURL}/images/${images[0].path}`
-            }}
-            alt={`Foto do produto ${product.name}`}
-            rounded="$md"
-            resizeMode="cover"
-            h={100}
-            w="$full"
-          />
+          {images.length ? (
+            <Image
+              source={{
+                uri: `${api.defaults.baseURL}/images/${images[0].path}`
+              }}
+              defaultSource={{
+                uri: `${api.defaults.baseURL}/images/${images[0].path}`
+              }}
+              alt={`Foto do produto ${product.name}`}
+              rounded="$md"
+              resizeMode="cover"
+              h={100}
+              w="$full"
+            />
+          ) : (
+            <Center rounded="$md" h={100} w="$full" bgColor="$gray400">
+              <Icon as="ShoppingBag" color="white" weight="bold" />
+            </Center>
+          )}
           {inactive && (
             <Box
               rounded="$md"
